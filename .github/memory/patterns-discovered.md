@@ -187,3 +187,61 @@ app.delete('/api/todos/:id', (req, res) => {
 - Provide specific error messages (not just "Invalid input")
 - Use `trim()` to handle whitespace-only strings
 - Consider using validation libraries (express-validator, Joi) for complex validation
+
+---
+
+### Pattern: ESLint Console Statement Exceptions
+
+**Context**: Server startup, critical logging, debugging in development
+
+**Problem**: 
+- ESLint `no-console` rule flags all console statements as warnings
+- Some console usage is legitimate (server startup, critical errors)
+- Need to distinguish between debugging console.log (remove) vs operational logging (keep)
+
+**Solution**: 
+Use `eslint-disable-next-line no-console` for legitimate console usage, but remove debugging console statements
+
+**Example**:
+```javascript
+// ✅ DO: Allow console for server startup (operational logging)
+app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
+  console.log(`Server running on port ${PORT}`);
+});
+
+// ✅ DO: Allow console for critical errors
+process.on('uncaughtException', (err) => {
+  // eslint-disable-next-line no-console
+  console.error('Uncaught exception:', err);
+  process.exit(1);
+});
+
+// ❌ DON'T: Leave debugging console.log statements
+app.get('/api/todos', (req, res) => {
+  console.log('Getting todos...'); // Remove this
+  res.json(todos);
+});
+
+// ✅ DO: Use proper error handling instead
+app.get('/api/todos', (req, res) => {
+  try {
+    res.json(todos);
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('Error fetching todos:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+```
+
+**Related Files**: 
+- `packages/backend/src/index.js` - Server startup logging
+- `packages/backend/src/app.js` - API endpoints
+
+**Notes**: 
+- In production, consider using a proper logging library (winston, pino, bunyan)
+- Reserve console.log/console.error for operational events (startup, shutdown, critical errors)
+- Remove all debugging console statements before committing
+- The eslint-disable comment documents that console usage is intentional
+- For this exercise, the intentional console warning in index.js is acceptable for server startup
