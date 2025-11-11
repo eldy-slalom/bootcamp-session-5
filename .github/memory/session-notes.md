@@ -108,3 +108,52 @@ Copy this template for each new session:
 - [ ] Move to Step 5-3 for frontend implementation
 - [ ] Continue using TDD and code review patterns
 - [ ] Document additional patterns as they emerge
+
+---
+
+### Session: Step 5-3 Frontend Implementation with TDD - 2024-11-11
+
+**What Was Accomplished**
+- [x] Wrote React Testing Library tests FIRST for all missing features (TDD RED phase)
+- [x] Implemented delete functionality (actual API call instead of console.log)
+- [x] Fixed API URL to use relative path (works in dev and production)
+- [x] Added comprehensive error handling in React Query
+- [x] Implemented stats calculation from todos array
+- [x] Added empty state message
+- [x] Added error state UI
+- [x] Fixed lint errors (no-wait-for-multiple-assertions)
+- [x] All 21 tests passing (6 frontend + 15 backend)
+
+**Key Findings**
+- **TDD with React Testing Library is highly effective**: Tests clarified requirements, caught missing implementations
+- **Relative API URLs are portable**: Changed from hardcoded localhost to /api/todos
+- **React Query error handling requires explicit checks**: Must check response.ok and throw errors
+- **Conditional rendering improves UX**: Separate states for loading, error, empty, and data
+- **Material-UI accessibility**: IconButtons need aria-labels for testing and a11y
+- **Testing Library best practices**: One assertion per waitFor, use semantic queries
+
+**Decisions Made**
+- Used relative API URL instead of environment variables (simpler for this project)
+- Calculated stats on every render (acceptable for small arrays, no memoization needed)
+- Added aria-labels to all icon buttons for accessibility and testability
+- Used conditional rendering pattern: loading → error → empty → data
+- Removed edit functionality from scope (not in requirements, edit button remains as placeholder)
+
+**Patterns Documented**
+1. React Query Error Handling pattern
+2. Relative API URLs in Frontend pattern
+3. React Conditional Rendering for Loading/Error/Empty States pattern
+4. React Testing Library with Material-UI pattern
+
+**Outcomes**
+- All tests passing: ✅ (21 total: 6 frontend + 15 backend)
+- No lint errors: ✅ (0 errors, 0 warnings in both packages)
+- TDD workflow completed: ✅ (RED → GREEN → REFACTOR)
+- Features working: ✅ (delete, stats, empty state, error handling)
+- Code quality: ✅ (Clean, tested, documented)
+- Blockers: None
+
+**Next Steps**
+- [ ] Run /validate-step to verify Step 5-3 completion
+- [ ] Run /commit-and-push to trigger Step 5-4
+- [ ] Continue to final steps of the exercise
